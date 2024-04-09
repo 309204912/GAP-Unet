@@ -1,4 +1,3 @@
-#这个简单的注意力机制是通过在通道维度上计算全局平均池化（Global Average Pooling），然后通过一个全连接层来学习通道的权重。
 
 import torch
 import torch.nn as nn
@@ -6,7 +5,7 @@ import torch.nn as nn
 from nets.resnet import resnet50
 from nets.vgg import VGG16
 
-# 定义简单的注意力机制模块
+
 class SimpleAttention(nn.Module):
     def __init__(self, channels):
         super(SimpleAttention, self).__init__()
@@ -34,7 +33,7 @@ class SimpleAttention(nn.Module):
 
         return x
 
-# 修改unetUp类，引入简单的注意力机制
+
 class unetUp(nn.Module):
     def __init__(self, in_size, out_size):
         super(unetUp, self).__init__()
@@ -43,7 +42,7 @@ class unetUp(nn.Module):
         self.up = nn.UpsamplingBilinear2d(scale_factor=2)
         self.relu = nn.ReLU(inplace=True)
 
-        # 引入简单的注意力机制
+
         self.simple_attention = SimpleAttention(out_size)
 
     def forward(self, inputs1, inputs2):
@@ -54,7 +53,7 @@ class unetUp(nn.Module):
         outputs = self.conv2(outputs)
         outputs = self.relu(outputs)
 
-        # 应用简单的注意力机制
+
         outputs = self.simple_attention(outputs)
 
         return outputs
